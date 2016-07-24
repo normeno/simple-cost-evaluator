@@ -117,18 +117,26 @@ class CompanyController extends Controller
             ->editColumn('logo', function ($company) {
                 $image = asset("/images/{$company->logo}");
 
-                if (file_exists(public_path('images/'.$company->logo))) {
+                if (!empty($company->logo) && file_exists(public_path('images/'.$company->logo))) {
                     return "<img src='{$image}' width='100px'/>";
                 }
 
                 return '';
             })
+            ->editColumn('tax', function ($company) {
+                return "{$company->tax}%";
+            })
             ->addColumn('operations','
                 {{ link_to_route("company.edit", "Editar", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
-                {{ link_to_route("company.edit", "Empleados", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
+                {{ link_to_route("company.employees", "Empleados", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
                 {{ link_to_route("company.edit", "Presupuestos", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
                 ')
             ->removeColumn('id')
             ->make(true);
+    }
+
+    public function employees($company)
+    {
+        return view('employee.index', compact('company'));
     }
 }

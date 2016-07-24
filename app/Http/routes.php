@@ -31,8 +31,16 @@ Route::group(['middlewareGroups' => ['web', 'auth'] ], function () {
 
 	Route::get('company/datatable', 'CompanyController@datatable');
 	Route::resource('company', 'CompanyController');
+
+    Route::get('company/{company}/employees', [
+        'as' => 'company.employees', 'uses' => 'CompanyController@employees'
+    ]);
+
 	Route::resource('operating_expense', 'OperatingExpenseController');
 	Route::resource('calculator', 'CalculatorController');
+
+    Route::get('employee/{company}/datatable', 'EmployeeController@datatable');
+    Route::resource('employee', 'EmployeeController');
 
 	// Authentication routes...
 	Route::get('login', 'Auth\AuthController@getLogin');
