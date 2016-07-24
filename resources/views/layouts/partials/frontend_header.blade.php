@@ -45,6 +45,10 @@
 	    margin-left: 25%;
 	}
 
+	.btn-create {
+		margin-bottom: 10px;
+	}
+
 	/*.auth-form {
 		width: 200px;
 		margin-left: 40%;

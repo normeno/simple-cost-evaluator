@@ -8,6 +8,24 @@
 
 		<div class="form-group">
 
+			{{ Form::label('Logo', 'Logo:', ['class' => 'col-md-2 control-label']) }}
+
+			{!! Form::token() !!}
+
+			<div class="col-md-4">
+				{{ Form::file('logo', ['class' => 'form-control col-md-4', 'placeholder' => 'Nombre de la empresa']) }}
+
+				@if($errors->has('logo'))
+					<small class="error">* {{ $errors->first('logo') }}</small>
+				@endif
+			</div>
+
+			<div class="col-md-6"></div>
+
+		</div><!-- form-group -->
+
+		<div class="form-group">
+
 			{{ Form::label('name', 'Nombre:', ['class' => 'col-md-2 control-label']) }}
 
 			{!! Form::token() !!}
@@ -47,3 +65,5 @@
 	</div><!-- col-md-10 -->
 
 </div><!-- row -->
+
+{{ Session::forget('error') }}

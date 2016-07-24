@@ -2,7 +2,7 @@
 
 @section('content')
 
-{!! Form::open(['route' => 'company.store', 'method' => 'POST', 'class' => 'form-horizontal']) !!}
+{!! Form::open(['route' => 'company.store', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
 
 	@include('company.form')
 

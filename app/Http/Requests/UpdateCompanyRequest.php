@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class StoreCompanyRequest extends Request
+class UpdateCompanyRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,11 @@ class StoreCompanyRequest extends Request
      */
     public function rules()
     {
+        $company = $this->route('company');
+
         return [
             'logo'      =>  'image',
-            'name'      =>  'required|unique:companies,name|max:255',
+            'name'      =>  'required|max:255|unique:companies,name,'.$company,
             'tax'       =>  'required|integer|min:1|max:100',
         ];
     }

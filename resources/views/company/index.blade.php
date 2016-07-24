@@ -2,13 +2,17 @@
 
 @section('content')
 
-<table class="table">
-    <thead>
-        <th>Nombre</th>
-        <th>Impuesto</th>
-        <th>Actiones</th>
-    </thead>
-</table>
+    {{ link_to_route('company.create', 'Crear Empresa', null, ['class' => 'btn btn-default btn-create']) }}
+
+
+    <table class="table">
+        <thead>
+            <th>Logo</th>
+            <th>Nombre</th>
+            <th>Impuesto</th>
+            <th>Actiones</th>
+        </thead>
+    </table>
 
 @endsection
 
@@ -33,10 +37,17 @@
             ],
             ajax: '/company/datatable/',
             columns: [
+                { data: 'logo', name: 'logo' },
                 { data: 'name', name: 'name' },
                 { data: 'tax', name: 'tax' },
                 { data: 'operations', name: 'operations' },
-            ]
+            ],
+            columnsDef: [
+                {
+                    targets: 1,
+                    render: 123
+                }
+            ],
         });
     });
 </script>

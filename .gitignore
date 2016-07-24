@@ -7,3 +7,4 @@ Homestead.json
 /storage/database/database.sqlite
 
 .idea/
+public/images/

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Symfony\Component\HttpFoundation\File\File;
 
 class Company extends Model
 {
@@ -23,6 +24,16 @@ class Company extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'tax', 'user_id',
+        'name', 'logo','tax', 'user_id',
     ];
+
+    public function setLogoAttribute($value)
+    {
+        if (!empty($value)) {
+            $name = "logo_{$this->attributes['name']}.{$value->getClientOriginalExtension()}";
+
+            $this->attributes['logo'] = $name;
+            $value->move('images/', $name);
+        }
+    }
 }

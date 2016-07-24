@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateCompanyRequest;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-
 use App\Http\Requests\StoreCompanyRequest;
-
 use App\Company;
-
 use Redirect;
-
 use Auth;
+use Symfony\Component\HttpFoundation\File\File;
 use Yajra\Datatables\Datatables;
+use Session;
 
 class CompanyController extends Controller
 {
@@ -57,9 +56,7 @@ class CompanyController extends Controller
 
         Company::create($request->all());
 
-        Session::flash('success', 'Éxito al crear registro!');
-
-        return redirect('/company');
+        return redirect('/company')->with('success', 'Éxito al crear registro!');
     }
 
     /**
@@ -81,7 +78,8 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $company = Company::find($id);
+        return view('company.edit', compact('company'));
     }
 
     /**
@@ -91,9 +89,13 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompanyRequest $request, $id)
     {
-        //
+        $company = Company::find($id);
+        $company->fill($request->all());
+        $company->save();
+
+        return redirect('/company')->with('success', 'Éxito al modificar registro!');
     }
 
     /**
@@ -109,16 +111,24 @@ class CompanyController extends Controller
 
     public function datatable($type = null)
     {
-        //return Datatables::of(User::all())->make(true);
-        $company = Company::where('user_id', Auth::user()->id);
+        $companies = Company::where('user_id', Auth::user()->id);
 
-        return Datatables::of($company)
-            ->addColumn('operations',
-                '<a href="{{ URL::route( \'company.edit\', [$id] ) }}">editar</a>
-                 <a href="{{ URL::route( \'company.destroy\', [$id] ) }}">eliminar</a>
+        return Datatables::of($companies)
+            ->editColumn('logo', function ($company) {
+                $image = asset("/images/{$company->logo}");
+
+                if (file_exists(public_path('images/'.$company->logo))) {
+                    return "<img src='{$image}' width='100px'/>";
+                }
+
+                return '';
+            })
+            ->addColumn('operations','
+                {{ link_to_route("company.edit", "Editar", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
+                {{ link_to_route("company.edit", "Empleados", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
+                {{ link_to_route("company.edit", "Presupuestos", ["company" => $id], ["class" => "btn btn-default btn-xs"]) }}
                 ')
             ->removeColumn('id')
-
             ->make(true);
     }
 }
